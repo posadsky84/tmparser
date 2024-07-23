@@ -6,6 +6,16 @@ import dayjs from 'dayjs';
 
 
 const isNumber = n => !isNaN(n);
+const myToDate = ddateStr => {
+  if (ddateStr === "dns" || ddateStr === "dnf" || ddateStr === "DNS" ||ddateStr === "DNF") return null;
+
+  const midPos = ddateStr.indexOf(" ");
+  const part1 = ddateStr.substring(0, midPos).replaceAll(".", "-");
+  let part2 = ddateStr.substring(midPos + 1).trimEnd();
+  if (part2.length < 5) part2 = "0" + part2;
+  return part1 + "T" + part2;
+}
+
 
 const instance = axios.create({
   baseURL: 'http://127.0.0.1:1337/api',
@@ -76,23 +86,24 @@ const postDistance = async ({fullName, name, raceId, km, courseType}) => {
 
 }
 
+const postMember = async (data) => {
+  const {runner, dns, dnf, child} = data;
+  const membersData = {
+    "data": {
+      "runner": runner,
+      "dns": dns,
+      "dnf": dnf,
+      "child": child,
+    }
+  }
 
+  const ress = await instance.post(`/members`, membersData);
 
+  return ress.data.data.id;
 
-
-
-
-const myToDate = ddateStr => {
-  if (ddateStr === "dns" || ddateStr === "dnf" || ddateStr === "DNS" ||ddateStr === "DNF") return null;
-
-  const midPos = ddateStr.indexOf(" ");
-  const part1 = ddateStr.substring(0, midPos).replaceAll(".", "-");
-  let part2 = ddateStr.substring(midPos + 1).trimEnd();
-  if (part2.length < 5) part2 = "0" + part2;
-  return part1 + "T" + part2;
 }
 
-const postRunner = async (data, runners) => {
+const postRunner = async (data, members) => {
   const {firstName, lastName, midName, year, location} = data;
   const pData = {
     "data": {
@@ -110,28 +121,35 @@ const postRunner = async (data, runners) => {
   filterString += (midName ? "filters[midName][$eq]=" + midName : "filters[midName][$null]=true") + "&";
 
   const resSearch = await instance.get(`/runners${filterString}`);
+  let runnerId;
   if (resSearch.data.data.length) {
-    runners.push(resSearch.data.data[0].id);
+    runnerId = resSearch.data.data[0].id;
   } else {
     const ress = await instance.post(`/runners`, pData);
-    runners.push(ress.data.data.id);
+    runnerId = ress.data.data.id;
   }
+
+  data.runner = runnerId;
+  const memberId = await postMember(data);
+  members.push(memberId);
+
 
 }
 
-const postTeam = async ({distance, name, start, finish, comm, runners, place, runnersChildren, result}) => {
+const postTeam = async ({distance, name, start, finish, comm, place, members, result, dns, dnf}) => {
 
   const pData = {
     "data": {
       "distance": distance,
       "name": name,
-      "runners": runners,
       "start": start,
       "finish": finish,
       "comm": comm,
       "place": place,
       "result": result,
-      "runnersChildren": runnersChildren,
+      "members": members,
+      "dns": dns,
+      "dnf": dnf,
     }
   }
 
@@ -148,8 +166,9 @@ const parseRunner = str => {
      midName: null,
      year: null,
      location: null,
-     kid: false,
      dns: false,
+     dnf: false,
+     child: false,
    }
 
    const rData = str.split(",");
@@ -214,8 +233,9 @@ const parseKids = str => {
       midName: null,
       year: null,
       location: null,
-      kid: true,
+      child: true,
       dns: false,
+      dnf: false,
     }
 
 
@@ -270,6 +290,8 @@ const parseKids = str => {
 
 const fLoadRace = async (race) => {
 
+  const KV = 60 * 24;
+
   console.log("Загружаем гонку: " + race.raceName);
   const raceId = await postRace(race);
   console.log("");
@@ -291,31 +313,31 @@ const fLoadRace = async (race) => {
 
       for (const item of data) {
 
-        let runners = [];
-        let runnersChildren = [];
+        let members = [];
 
         let res;
         res = item[2] ? parseRunner(item[2]) : null;
-        if (res) await postRunner(res, runners);
+        if (res) await postRunner(res, members);
         res = item[3] ? parseRunner(item[3]) : null;
-        if (res) await postRunner(res, runners);
+        if (res) await postRunner(res, members);
         res = item[4] ? parseRunner(item[4]) : null;
-        if (res) await postRunner(res, runners);
+        if (res) await postRunner(res, members);
         res = item[5] ? parseKids(item[5]) : [];
         if (res.length) {
-          for (const item2 of res) await postRunner(item2, runnersChildren);
+          for (const item2 of res) await postRunner(item2, members);
         }
 
         let teamData = {};
 
-        teamData.place = item[0];
         teamData.name = item[1] ? item[1] : null;
         teamData.start = item[6] ? myToDate(item[6]) : null;
+        teamData.dns = !teamData.start;
         teamData.finish = item[7] ? myToDate(item[7]) : null;
-        teamData.result = dayjs(teamData.finish).diff(dayjs(teamData.start), "seconds");
+        if (!teamData.dns) teamData.dnf = !teamData.finish;
+        teamData.result = dayjs(teamData.finish).diff(dayjs(teamData.start), "minutes");
+        teamData.place = teamData.result && teamData.result < KV ? item[0] : null;
         teamData.comm = item[9] ? item[9] : null;
-        teamData.runners = runners;
-        teamData.runnersChildren = runnersChildren;
+        teamData.members = members;
         teamData.distance = distanceId;
 
         await postTeam(teamData);
@@ -331,7 +353,7 @@ const fLoadRace = async (race) => {
 
 
 
-  };
+  }
 
 
 
