@@ -639,7 +639,7 @@ export const dataMap = [
   { raceName: "Весенний Турмарафон 2023",
     id: 29,
     ddate: '2023-04-22',
-    needLoad: false,
+    needLoad: true,
     sname: "Весенний",
     location: "Пущино",
     distances: [
@@ -666,7 +666,7 @@ export const dataMap = [
   { raceName: "наСТОящий Турмарафон 2023",
     id: 30,
     ddate: '2023-05-27',
-    needLoad: false,
+    needLoad: true,
     sname: "наСТОящий",
     location: "Белоомут - Шатурторф",
     distances: [
@@ -682,7 +682,7 @@ export const dataMap = [
   { raceName: "Летний Турмарафон 2023",
     id: 31,
     ddate: '2023-07-15',
-    needLoad: false,
+    needLoad: true,
     sname: "Летний",
     location: "Погорелое Городище",
     distances: [
@@ -703,7 +703,7 @@ export const dataMap = [
   { raceName: "Осенний Турмарафон 2023",
     id: 32,
     ddate: '2023-10-14',
-    needLoad: false,
+    needLoad: true,
     sname: "Осенний",
     location: "Вербилки",
     distances: [
@@ -724,7 +724,7 @@ export const dataMap = [
   { raceName: "Зимний Турмарафон 2023",
     id: 33,
     ddate: '2023-12-09',
-    needLoad: false,
+    needLoad: true,
     sname: "Зимний",
     location: "Башкино",
     distances: [
@@ -766,7 +766,7 @@ export const dataMap = [
   { raceName: "Весенний Турмарафон 2024",
     id: 35,
     ddate: '2024-04-20',
-    needLoad: true,
+    needLoad: false,
     sname: "Весенний",
     location: "Шеметово (Ясногорск)",
     distances: [
@@ -793,7 +793,7 @@ export const dataMap = [
   { raceName: "наСТОящий Турмарафон 2024",
     id: 36,
     ddate: '2024-06-01',
-    needLoad: false,
+    needLoad: true,
     sname: "наСТОящий",
     location: "Головино - Шатурторф",
     distances: [
@@ -823,12 +823,6 @@ export const dataMap = [
         courseType: "tourist",
         km: 50,
         fileName: "лето2024_50.txt"
-      },
-      {fullName: "Летний ТМ 2024, 100km Ultra",
-        name: "100km Ultra",
-        courseType: "ultra",
-        km: 100,
-        fileName: "лето2024_100.txt"
       },
     ],
   },

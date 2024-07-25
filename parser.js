@@ -103,7 +103,7 @@ const postMember = async (data) => {
 
 }
 
-const postRunner = async (data, members) => {
+const postRunner = async (data, members, badge, raceId) => {
   const {firstName, lastName, midName, year, location} = data;
   const pData = {
     "data": {
@@ -128,6 +128,22 @@ const postRunner = async (data, members) => {
     const ress = await instance.post(`/runners`, pData);
     runnerId = ress.data.data.id;
   }
+
+  if (badge) {
+
+    console.log("Добавляем значок: ", badge);
+
+    const badgeData = {
+      data: {
+        runner: runnerId,
+        race: raceId,
+        number: badge,
+      }
+    }
+
+    const resss = await instance.post(`/badges`, badgeData);
+  }
+
 
   data.runner = runnerId;
   const memberId = await postMember(data);
@@ -181,6 +197,10 @@ const parseRunner = str => {
          if (!item) continue;
          if (item === "del") {
            res.dns = true;
+           continue;
+         }
+         if (item === "dnf") {
+           res.dnf = true;
            continue;
          }
          progress++;
@@ -249,6 +269,10 @@ const parseKids = str => {
             res.dns = true;
             continue;
           }
+          if (item === "dnf") {
+            res.dnf = true;
+            continue;
+          }
           progress++;
           if (progress === 0) {
             res.lastName = item;
@@ -315,13 +339,15 @@ const fLoadRace = async (race) => {
 
         let members = [];
 
+        const badges = item[10] ? item[10].split(",") : [];
+
         let res;
         res = item[2] ? parseRunner(item[2]) : null;
-        if (res) await postRunner(res, members);
+        if (res) await postRunner(res, members, badges[0], raceId);
         res = item[3] ? parseRunner(item[3]) : null;
-        if (res) await postRunner(res, members);
+        if (res) await postRunner(res, members, badges[1], raceId);
         res = item[4] ? parseRunner(item[4]) : null;
-        if (res) await postRunner(res, members);
+        if (res) await postRunner(res, members, badges[2], raceId);
         res = item[5] ? parseKids(item[5]) : [];
         if (res.length) {
           for (const item2 of res) await postRunner(item2, members);
