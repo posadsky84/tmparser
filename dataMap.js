@@ -480,7 +480,7 @@ export const dataMap = [
   { raceName: "Осенний Турмарафон 2021",
     id: 22,
     ddate: '2021-10-02',
-    needLoad: false,
+    needLoad: true,
     sname: "Осенний",
     location: "Москворецкая",
     distances: [
@@ -488,20 +488,20 @@ export const dataMap = [
         name: "30km Lite",
         courseType: "lite",
         km: 30,
-        fileName: "лето2021_30.txt"
+        fileName: "осень2021_30.txt"
       },
       {fullName: "Осенний ТМ 2021, 55km Tourist",
         name: "55km Tourist",
         courseType: "tourist",
         km: 55,
-        fileName: "лето2021_55.txt"
+        fileName: "осень2021_55.txt"
       },
     ],
   },
   { raceName: "Зимний Турмарафон 2021",
     id: 23,
     ddate: '2021-12-11',
-    needLoad: false,
+    needLoad: true,
     sname: "Зимний",
     location: "Темпы",
     distances: [
@@ -509,20 +509,20 @@ export const dataMap = [
         name: "30km Lite",
         courseType: "lite",
         km: 30,
-        fileName: "лето2021_30.txt"
+        fileName: "зима2021_30.txt"
       },
       {fullName: "Зимний ТМ 2021, 50km Tourist",
         name: "50km Tourist",
         courseType: "tourist",
         km: 50,
-        fileName: "лето2021_50.txt"
+        fileName: "зима2021_50.txt"
       },
     ],
   },
   { raceName: "Весенний Турмарафон 2022",
     id: 24,
     ddate: '2022-04-23',
-    needLoad: false,
+    needLoad: true,
     sname: "Весенний",
     location: "Боровск",
     distances: [
@@ -549,7 +549,7 @@ export const dataMap = [
   { raceName: "Летний Турмарафон 2022",
     id: 25,
     ddate: '2022-07-16',
-    needLoad: false,
+    needLoad: true,
     sname: "Летний",
     location: "Грибово",
     distances: [
@@ -570,7 +570,7 @@ export const dataMap = [
   { raceName: "Осенний Турмарафон 2022",
     id: 26,
     ddate: '2022-10-08',
-    needLoad: false,
+    needLoad: true,
     sname: "Осенний",
     location: "Звенигород",
     distances: [
@@ -580,11 +580,11 @@ export const dataMap = [
         km: 30,
         fileName: "осень2022_30.txt"
       },
-      {fullName: "Осенний ТМ 2022, 50km Tourist",
-        name: "50km Tourist",
+      {fullName: "Осенний ТМ 2022, 55km Tourist",
+        name: "55km Tourist",
         courseType: "tourist",
-        km: 50,
-        fileName: "осень2022_50.txt",
+        km: 55,
+        fileName: "осень2022_55.txt",
       },
       {fullName: "Осенний ТМ 2022, 75km Ultra",
         name: "75km Ultra",
@@ -597,7 +597,7 @@ export const dataMap = [
   { raceName: "Зимний Турмарафон 2022",
     id: 27,
     ddate: '2022-12-10',
-    needLoad: false,
+    needLoad: true,
     sname: "Зимний",
     location: "Запутная",
     distances: [
@@ -618,7 +618,7 @@ export const dataMap = [
   { raceName: "Лыжный Турмарафон 2023",
     id: 28,
     ddate: '2023-02-18',
-    needLoad: false,
+    needLoad: true,
     sname: "Лыжный",
     location: "Донховка",
     distances: [
@@ -745,7 +745,7 @@ export const dataMap = [
   { raceName: "Лыжный Турмарафон 2024",
     id: 34,
     ddate: '2024-02-17',
-    needLoad: false,
+    needLoad: true,
     sname: "Лыжный",
     location: "Запутная",
     distances: [
@@ -766,7 +766,7 @@ export const dataMap = [
   { raceName: "Весенний Турмарафон 2024",
     id: 35,
     ddate: '2024-04-20',
-    needLoad: false,
+    needLoad: true,
     sname: "Весенний",
     location: "Шеметово (Ясногорск)",
     distances: [
@@ -808,7 +808,7 @@ export const dataMap = [
   { raceName: "Летний Турмарафон 2024",
     id: 37,
     ddate: '2024-07-13',
-    needLoad: false,
+    needLoad: true,
     sname: "Летний",
     location: "",
     distances: [

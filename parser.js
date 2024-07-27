@@ -105,15 +105,6 @@ const postMember = async (data) => {
 
 const postRunner = async (data, members, badge, raceId) => {
   const {firstName, lastName, midName, year, location} = data;
-  const pData = {
-    "data": {
-      "firstName": firstName,
-      "lastName": lastName,
-      "midName": midName,
-      "year": year,
-      "location": location,
-  }
-  }
 
   let filterString = "?";
   filterString += (firstName ? "filters[firstName][$eq]=" + firstName : "filters[firstName][$null]=true") + "&";
@@ -123,15 +114,28 @@ const postRunner = async (data, members, badge, raceId) => {
   const resSearch = await instance.get(`/runners${filterString}`);
   let runnerId;
   if (resSearch.data.data.length) {
+    const foundRunnerData = resSearch.data.data[0].attributes;
     runnerId = resSearch.data.data[0].id;
+
+    //Проверяем, не надо ли обновить дату и/или город
+    const yearToUpdate = !foundRunnerData.year && data.year;
+    const locationToUpdate = (!foundRunnerData.location || foundRunnerData.location !== data.location) && data.location;
+
+    const updatesList = {};
+    if (yearToUpdate) updatesList.year = yearToUpdate;
+    if (locationToUpdate) updatesList.location = locationToUpdate;
+
+    if (Object.keys(updatesList).length) {
+      const updateData = { data: { ...updatesList} };
+      const resss = await instance.put(`/runners/${runnerId}`, updateData);
+    }
+
   } else {
-    const ress = await instance.post(`/runners`, pData);
+    const ress = await instance.post(`/runners`, {data});
     runnerId = ress.data.data.id;
   }
 
   if (badge) {
-
-    console.log("Добавляем значок: ", badge);
 
     const badgeData = {
       data: {
@@ -152,24 +156,9 @@ const postRunner = async (data, members, badge, raceId) => {
 
 }
 
-const postTeam = async ({distance, name, start, finish, comm, place, members, result, dns, dnf}) => {
+const postTeam = async (data) => {
 
-  const pData = {
-    "data": {
-      "distance": distance,
-      "name": name,
-      "start": start,
-      "finish": finish,
-      "comm": comm,
-      "place": place,
-      "result": result,
-      "members": members,
-      "dns": dns,
-      "dnf": dnf,
-    }
-  }
-
-  const ress = await instance.post(`/teams`, pData);
+  const ress = await instance.post(`/teams`, {data});
 
 }
 
@@ -313,6 +302,7 @@ const parseKids = str => {
 
 
 const fLoadRace = async (race) => {
+  const validRewards = new Set(['1М','2М','3М','1Ж','2Ж','3Ж','1С','2С','3С','1РД','2РД','3РД']);
 
   const KV = 60 * 24;
 
@@ -361,10 +351,17 @@ const fLoadRace = async (race) => {
         teamData.finish = item[7] ? myToDate(item[7]) : null;
         if (!teamData.dns) teamData.dnf = !teamData.finish;
         teamData.result = dayjs(teamData.finish).diff(dayjs(teamData.start), "minutes");
-        teamData.place = teamData.result && teamData.result < KV ? item[0] : null;
-        teamData.comm = item[9] ? item[9] : null;
+        if (teamData.result <= KV) {
+          teamData.place = item[0];
+        }
+        if (teamData.result > KV) {
+          teamData.result = null;
+          teamData.dnf = true;
+        }
+        teamData.reward = validRewards.has(item[9]) ? item[9] : null;
         teamData.members = members;
         teamData.distance = distanceId;
+        teamData.comm = [!validRewards.has(item[9]) ? item[9] : null, item[11]].filter(item => item).join(" ");
 
         await postTeam(teamData);
 
