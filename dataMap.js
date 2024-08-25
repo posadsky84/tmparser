@@ -195,7 +195,7 @@ export const dataMap = [
   { raceName: "Весенний Турмарафон 2019",
     id: 9,
     ddate: '2019-04-20',
-    needLoad: false,
+    needLoad: true,
     sname: "Весенний",
     location: "Узуново",
     distances: [
@@ -222,7 +222,7 @@ export const dataMap = [
   { raceName: "Летний Турмарафон 2019",
     id: 10,
     ddate: '2019-07-20',
-    needLoad: false,
+    needLoad: true,
     sname: "Летний",
     location: "Сушнево",
     distances: [
@@ -243,7 +243,7 @@ export const dataMap = [
   { raceName: "Осенний Турмарафон 2019",
     id: 11,
     ddate: '2019-10-05',
-    needLoad: false,
+    needLoad: true,
     sname: "Осенний",
     location: "Донховка",
     distances: [
@@ -264,18 +264,18 @@ export const dataMap = [
   { raceName: "Зимний Турмарафон 2019",
     id: 12,
     ddate: '2019-12-07',
-    needLoad: false,
+    needLoad: true,
     sname: "Зимний",
     location: "Шаликово",
     distances: [
       {fullName: "Осенний ТМ 2019, 27km Lite",
-        name: "25km Lite",
+        name: "27km Lite",
         courseType: "lite",
         km: 27,
         fileName: "зима2019_27.txt"
       },
       {fullName: "Осенний ТМ 2019, 57km Tourist",
-        name: "55km Tourist",
+        name: "57km Tourist",
         courseType: "tourist",
         km: 57,
         fileName: "зима2019_57.txt"
@@ -375,7 +375,7 @@ export const dataMap = [
   { raceName: "Зимний Турмарафон 2020",
     id: 17,
     ddate: '2020-12-12',
-    needLoad: false,
+    needLoad: true,
     sname: "Зимний",
     location: "Ямуга",
     distances: [
@@ -396,7 +396,7 @@ export const dataMap = [
   { raceName: "Лыжный Турмарафон 2021",
     id: 18,
     ddate: '2021-02-13',
-    needLoad: false,
+    needLoad: true,
     sname: "Лыжный",
     location: "Балакирево",
     distances: [
@@ -417,7 +417,7 @@ export const dataMap = [
   { raceName: "Весенний Турмарафон 2021",
     id: 19,
     ddate: '2021-04-17',
-    needLoad: false,
+    needLoad: true,
     sname: "Весенний",
     location: "Суходрев",
     distances: [
@@ -444,7 +444,7 @@ export const dataMap = [
   { raceName: "наСТОящий Турмарафон 2021",
     id: 20,
     ddate: '2021-05-29',
-    needLoad: false,
+    needLoad: true,
     sname: "наСТОящий",
     location: "Петушки-Черусти",
     distances: [
@@ -452,14 +452,14 @@ export const dataMap = [
         name: "100km Real",
         courseType: "real",
         km: 100,
-        fileName: "настоящий2021_100.txt"
+        fileName: "настоящий2021.txt"
       },
     ],
   },
   { raceName: "Летний Турмарафон 2021",
     id: 21,
     ddate: '2021-07-17',
-    needLoad: false,
+    needLoad: true,
     sname: "Летний",
     location: "Жилёво",
     distances: [
@@ -469,11 +469,11 @@ export const dataMap = [
         km: 25,
         fileName: "лето2021_25.txt"
       },
-      {fullName: "Летний ТМ 2021, 55km Tourist",
-        name: "55km Tourist",
+      {fullName: "Летний ТМ 2021, 50km Tourist",
+        name: "50km Tourist",
         courseType: "tourist",
-        km: 55,
-        fileName: "лето2021_55.txt"
+        km: 50,
+        fileName: "лето2021_50.txt"
       },
     ],
   },
