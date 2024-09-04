@@ -285,7 +285,7 @@ export const dataMap = [
   { raceName: "Лыжный Турмарафон 2020",
     id: 13,
     ddate: '2020-02-15',
-    needLoad: false,
+    needLoad: true,
     sname: "Лыжный",
     location: "Лесодолгоруково",
     distances: [
@@ -306,7 +306,7 @@ export const dataMap = [
   { raceName: "Весенний Турмарафон 2020",
     id: 14,
     ddate: '2020-04-18',
-    needLoad: false,
+    needLoad: true,
     sname: "Весенний",
     location: "Жилёво",
     distances: [
@@ -327,7 +327,7 @@ export const dataMap = [
   { raceName: "Летний Турмарафон 2020",
     id: 15,
     ddate: '2020-07-18',
-    needLoad: false,
+    needLoad: true,
     sname: "Летний",
     location: "Хотьково",
     distances: [
@@ -348,7 +348,7 @@ export const dataMap = [
   { raceName: "Осенний Турмарафон 2020",
     id: 16,
     ddate: '2020-10-03',
-    needLoad: false,
+    needLoad: true,
     sname: "Осенний",
     location: "Воиново",
     distances: [

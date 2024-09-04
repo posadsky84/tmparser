@@ -104,7 +104,15 @@ const postMember = async (data) => {
 }
 
 const postRunner = async (data, members, badge, raceId) => {
-  const {firstName, lastName, midName, year, location} = data;
+  let {firstName, lastName, midName, year, location} = data;
+
+  //Исключения в данных
+  if (firstName === "Андрюха" && !lastName) {
+    lastName = "Самойлов";
+    firstName = "Андрей";
+  }
+
+  //Конец исключений в данных
 
   let filterString = "?";
   filterString += (firstName ? "filters[firstName][$eq]=" + firstName : "filters[firstName][$null]=true") + "&";
@@ -325,6 +333,8 @@ const fLoadRace = async (race) => {
 
       const data = fs.readFileSync("data/" + distance.fileName).toString().split(`\n`).map(i => i.split(`\t`));
 
+      let currentPlace = 0;
+
       for (const item of data) {
 
         let members = [];
@@ -352,7 +362,7 @@ const fLoadRace = async (race) => {
         if (!teamData.dns) teamData.dnf = !teamData.finish;
         teamData.result = dayjs(teamData.finish).diff(dayjs(teamData.start), "minutes");
         if (teamData.result <= KV) {
-          teamData.place = item[0];
+          teamData.place = +item[0];
         }
         if (teamData.result > KV) {
           teamData.result = null;
@@ -362,6 +372,14 @@ const fLoadRace = async (race) => {
         teamData.members = members;
         teamData.distance = distanceId;
         teamData.comm = [!validRewards.has(item[9]) ? item[9] : null, item[11]].filter(item => item).join(" ");
+
+        if (teamData.place && (teamData.place - currentPlace !== 1)) {
+          console.log("Ошибка! Неправильное место: ");
+          console.log("currentPlace = ", currentPlace);
+          console.log("teamData.place = ", teamData.place);
+          throw new Error(' == Неправильное место. Выход');
+        }
+        currentPlace++;
 
         await postTeam(teamData);
 
