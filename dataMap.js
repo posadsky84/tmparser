@@ -147,7 +147,7 @@ export const dataMap = [
   { raceName: "Осенний Турмарафон 2018",
     id: 7,
     ddate: '2018-10-06',
-    needLoad: false,
+    needLoad: true,
     sname: "Осенний",
     location: "Верея",
     distances: [
@@ -174,7 +174,7 @@ export const dataMap = [
   { raceName: "Зимний Турмарафон 2018",
     id: 8,
     ddate: '2018-12-08',
-    needLoad: false,
+    needLoad: true,
     sname: "Зимний",
     location: "Лесодолгоруково",
     distances: [

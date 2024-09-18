@@ -107,7 +107,7 @@ const postRunner = async (data, members, badge, raceId) => {
   let {firstName, lastName, midName, year, location} = data;
 
   //Исключения в данных
-  if (firstName === "Андрюха" && !lastName) {
+  if ((firstName === "Андрюха" && !lastName) || (lastName === "Андрюха")) {
     lastName = "Самойлов";
     firstName = "Андрей";
   }
@@ -406,6 +406,24 @@ const fLoadAll = async () => {
       await fLoadRace(item);
   }
 
+  console.log("Заполняем runnersStartedCount");
+  const resDistances = await instance.get(`/races?populate=distances.teams.members&sort=id:desc`);
+  resDistances.data.data.forEach(itemRace => {
+    console.log("");
+    console.log(itemRace.attributes.name);
+    itemRace.attributes.distances.data.forEach(itemDistance => {
+      console.log(`   ` + itemDistance.attributes.name);
+      const startedCount = itemDistance.attributes.teams.data.reduce((res, teamsItem) => {
+        return res + (!teamsItem.attributes.dns
+                      ? teamsItem.attributes.members.data
+                           .reduce((res2, membersItem) => res2 + !membersItem.attributes.dns, 0)
+                      : 0);
+      },0);
+      console.log(`   ` + "startedCount= ", startedCount);
+      console.log("");
+      instance.put(`/distances/${itemDistance.id}`, { data: {runnersStartedCount: startedCount} });
+    });
+  })
 }
 
 
