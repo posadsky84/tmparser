@@ -104,20 +104,25 @@ const postMember = async (data) => {
 }
 
 const postRunner = async (data, members, badge, raceId) => {
-  let {firstName, lastName, midName, year, location} = data;
 
   //Исключения в данных
-  if ((firstName === "Андрюха" && !lastName) || (lastName === "Андрюха")) {
-    lastName = "Самойлов";
-    firstName = "Андрей";
+  if ((data.firstName === "Андрюха" && !data.lastName) || (data.lastName === "Андрюха")) {
+    data.lastName = "Самойлов";
+    data.firstName = "Андрей";
+  }
+
+  if (data.firstName === "Артем") {
+    data.firstName = "Артём";
   }
 
   //Конец исключений в данных
 
   let filterString = "?";
-  filterString += (firstName ? "filters[firstName][$eq]=" + firstName : "filters[firstName][$null]=true") + "&";
-  filterString += (lastName ? "filters[lastName][$eq]=" + lastName : "filters[lastName][$null]=true") + "&";
-  filterString += (midName ? "filters[midName][$eq]=" + midName : "filters[midName][$null]=true") + "&";
+  filterString += (data.firstName ? "filters[firstName][$eq]=" + data.firstName : "filters[firstName][$null]=true") + "&";
+  filterString += (data.lastName ? "filters[lastName][$eq]=" + data.lastName : "filters[lastName][$null]=true") + "&";
+
+  //Попробуем искать без отчества. Будем дописывать отчество, если оно появилось.
+  //filterString += (midName ? "filters[midName][$eq]=" + midName : "filters[midName][$null]=true") + "&";
 
   const resSearch = await instance.get(`/runners${filterString}`);
   let runnerId;
@@ -125,13 +130,25 @@ const postRunner = async (data, members, badge, raceId) => {
     const foundRunnerData = resSearch.data.data[0].attributes;
     runnerId = resSearch.data.data[0].id;
 
-    //Проверяем, не надо ли обновить дату и/или город
+    if (foundRunnerData.midName && data.midName && (foundRunnerData.midName !== data.midName)) {
+      //исключение "Разные отчества". Если такое есть, остановимся
+      console.log("foundRunnerData.midName:", foundRunnerData.midName);
+      console.log("data.midName:",data.midName);
+      console.log("Загружаем: ");
+      console.log(data);
+      console.log("raceID:", raceId);
+      throw "Разные отчества! Надо разбираться.";
+    }
+
+    //Проверяем, не надо ли обновить дату и/или город +отчество
     const yearToUpdate = !foundRunnerData.year && data.year;
     const locationToUpdate = (!foundRunnerData.location || foundRunnerData.location !== data.location) && data.location;
+    const midNameToUpdate = (!foundRunnerData.midName) && data.midName;
 
     const updatesList = {};
     if (yearToUpdate) updatesList.year = yearToUpdate;
     if (locationToUpdate) updatesList.location = locationToUpdate;
+    if (midNameToUpdate) updatesList.midName = midNameToUpdate;
 
     if (Object.keys(updatesList).length) {
       const updateData = { data: { ...updatesList} };
@@ -268,6 +285,10 @@ const parseKids = str => {
           }
           if (item === "dnf") {
             res.dnf = true;
+            continue;
+          }
+          if (item === "adult") {
+            res.child = false;
             continue;
           }
           progress++;

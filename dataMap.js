@@ -829,7 +829,7 @@ export const dataMap = [
   { raceName: "Осенний Турмарафон 2024",
     id: 38,
     ddate: '2024-10-05',
-    needLoad: false,
+    needLoad: true,
     sname: "Осенний",
     location: "",
     distances: [
@@ -839,11 +839,11 @@ export const dataMap = [
         km: 25,
         fileName: "осень2024_25.txt"
       },
-      {fullName: "Осенний ТМ 2024, 50km Tourist",
-        name: "50km Tourist",
+      {fullName: "Осенний ТМ 2024, 55km Tourist",
+        name: "55km Tourist",
         courseType: "tourist",
-        km: 50,
-        fileName: "осень2024_50.txt"
+        km: 55,
+        fileName: "осень2024_55.txt"
       },
     ],
   },
@@ -854,17 +854,44 @@ export const dataMap = [
     sname: "Зимний",
     location: "",
     distances: [
-      {fullName: "Зимний ТМ 2025, 25km Lite",
-        name: "25km Lite",
+      {fullName: "Зимний ТМ 2024, 28km Lite",
+        name: "28km Lite",
         courseType: "lite",
-        km: 25,
-        fileName: "зима2024_25.txt"
+        km: 28,
+        fileName: "зима2024_28.txt"
       },
-      {fullName: "Зимний ТМ 2024, 50km Tourist",
-        name: "50km Tourist",
+      {fullName: "Зимний ТМ 2024, 55km Tourist",
+        name: "55km Tourist",
         courseType: "tourist",
-        km: 50,
-        fileName: "зима2024_50.txt"
+        km: 55,
+        fileName: "зима2024_55.txt"
+      },
+    ],
+  },
+  { raceName: "безЛыжный Турмарафон 2025",
+    id: 40,
+    ddate: '2025-02-15',
+    needLoad: false,
+    sname: "безЛыжный",
+    location: "",
+    distances: [
+      {fullName: "безЛыжный ТМ 2025, 28km Lite",
+        name: "12km Easy",
+        courseType: "easy",
+        km: 12,
+        fileName: "безлыжный2025_12.txt"
+      },
+      {fullName: "безЛыжный ТМ 2025, 55km Tourist",
+        name: "24km Lite",
+        courseType: "lite",
+        km: 24,
+        fileName: "безлыжный2025_24.txt"
+      },
+      {fullName: "безЛыжный ТМ 2025, 55km Tourist",
+        name: "35km Tourist",
+        courseType: "tourist",
+        km: 35,
+        fileName: "безлыжный2025_35.txt"
       },
     ],
   },
