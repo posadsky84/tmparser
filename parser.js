@@ -111,6 +111,11 @@ const postRunner = async (data, members, badge, raceId) => {
     data.firstName = "Андрей";
   }
 
+  if (data.lastName === "Ремыга" && data.firstName === "Евгения" ) {
+    data.firstName = "Женя";
+  }
+
+
   if (data.firstName === "Артем") {
     data.firstName = "Артём";
   }
@@ -377,11 +382,24 @@ const fLoadRace = async (race) => {
         let teamData = {};
 
         teamData.name = item[1] ? item[1] : null;
-        teamData.start = item[6] ? myToDate(item[6]) : null;
-        teamData.dns = !teamData.start;
-        teamData.finish = item[7] ? myToDate(item[7]) : null;
-        if (!teamData.dns) teamData.dnf = !teamData.finish;
-        teamData.result = dayjs(teamData.finish).diff(dayjs(teamData.start), "minutes");
+        if (item[6] === "gores") {
+          //спецовая загрузка для Лета-2017 и подобных, где нет времени старта
+          if (item[8] === "dnf") {
+            teamData.dnf = true;
+          } else {
+            const d1 = myToDate("2025.01.01 00:00:00");
+            const d2 = myToDate(`2025.01.01 ${item[8]}`);
+            teamData.result = dayjs(d2).diff(dayjs(d1), "minutes");
+          }
+        } else {
+          //обыкновенная загрузка
+          teamData.start = item[6] ? myToDate(item[6]) : null;
+          teamData.dns = !teamData.start;
+          teamData.finish = item[7] ? myToDate(item[7]) : null;
+          if (!teamData.dns) teamData.dnf = !teamData.finish;
+          teamData.result = dayjs(teamData.finish).diff(dayjs(teamData.start), "minutes");
+        }
+
         if (teamData.result <= KV) {
           teamData.place = +item[0];
         }
